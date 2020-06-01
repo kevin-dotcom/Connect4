@@ -1,0 +1,208 @@
+package javaproject;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
+
+public class ConnectFour extends JFrame implements ActionListener {
+
+    enum Piece {
+        Red,
+        Blue,
+        None
+    }
+
+    class Board extends JButton {
+
+        public int i, j;
+        public Piece piece = Piece.None;
+
+        public Board(int i, int j) {
+            this.i = i;
+            this.j = j;
+            setOpaque(true);
+            setColor();
+        }
+
+        public void setPiece(Piece piece) {
+            this.piece = piece;
+            setColor();
+        }
+
+        public void setColor() {
+            switch (piece) {
+                case Red:
+                    setBackground(Color.red);
+                    break;
+                case Blue:
+                    setBackground(Color.blue);
+                    break;
+                case None:
+                    setBackground(Color.white);
+                    break;
+            }
+        }
+    }
+
+    JLabel label = new JLabel("Player: ");
+    JLabel lblCurrentPlayer = new JLabel("");
+    JPanel Menu = new JPanel();
+    JPanel MenuBoards = new JPanel();
+    JButton Newgame = new JButton("New Game");
+
+    Board[][] Boards = new Board[7][6];
+
+    boolean winnerExists = false;
+    int currentPlayer = 1;
+    boolean AI;
+
+    public ConnectFour(boolean AI) {
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        currentPlayer = (int) (Math.random() * 2) + 1;
+        this.AI = AI;
+
+        Newgame.addActionListener(this);
+        switch (currentPlayer) {
+            case 1:
+                lblCurrentPlayer.setForeground(Color.blue);
+                lblCurrentPlayer.setText("Blue");
+                break;
+            case 2:
+                lblCurrentPlayer.setForeground(Color.red);
+                lblCurrentPlayer.setText("Red");
+                break;
+            default:
+                break;
+        }
+        Menu.add(Newgame);
+        Menu.add(label);
+        Menu.add(lblCurrentPlayer);
+
+        MenuBoards.setLayout(new GridLayout(6, 7));
+
+        for (int j = 0; j < 6; j++) {
+            for (int i = 0; i < 7; i++) {
+                Boards[i][j] = new Board(i, j);
+                Boards[i][j].addActionListener(this);
+                MenuBoards.add(Boards[i][j]);
+            }
+        }
+
+        add(Menu, BorderLayout.SOUTH);
+        add(MenuBoards, BorderLayout.CENTER);
+        setSize(500, 500);
+        setVisible(true);
+
+    }
+
+    public void actionPerformed(ActionEvent ae) {
+
+        if (ae.getSource() == Newgame) {
+            dispose();
+            new ConnectFour(true);
+        } else {
+            Board Board = (Board) ae.getSource();
+            System.out.println(Board);
+            insertTo(Board);
+        }
+    }
+
+    void insertTo(Board Board) {
+        if (Board.piece != Piece.None) {
+            return;
+        }
+
+        int i = Board.i;
+        int j = Board.j;
+
+        while (j < Boards[0].length - 1 && Boards[i][j + 1].piece == Piece.None) {
+            j++;
+        }
+
+        switch (currentPlayer) {
+            case 1:
+                Boards[i][j].setPiece(Piece.Blue);
+                break;
+            case 2:
+                Boards[i][j].setPiece(Piece.Red);
+                break;
+        }
+
+        currentPlayer = (currentPlayer % 2) + 1;
+
+        if (thereIsAWinner()) {
+            label.setText("Winner: ");
+            winnerExists = true;
+        } else {
+            switch (currentPlayer) {
+                case 1:
+                    lblCurrentPlayer.setForeground(Color.blue);
+                    lblCurrentPlayer.setText("Blue");
+                    break;
+                case 2:
+                    lblCurrentPlayer.setForeground(Color.red);
+                    lblCurrentPlayer.setText("Red");
+                    break;
+            }
+
+        }
+    }
+
+    public boolean thereIsAWinner() {
+        for (int j = 0; j < 6; j++) {
+            for (int i = 0; i < 7; i++) {
+                if (Boards[i][j].piece != Piece.None && connectsToFour(i, j)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean connectsToFour(int a, int b) {
+        if (lineOfFour(a, b, -1, -1)) {
+            return true;
+        }
+        if (lineOfFour(a, b, -1, 0)) {
+            return true;
+        }
+        if (lineOfFour(a, b, -1, 1)) {
+            return true;
+        }
+        if (lineOfFour(a, b, 0, -1)) {
+            return true;
+        }
+        if (lineOfFour(a, b, 0, 1)) {
+            return true;
+        }
+        if (lineOfFour(a, b, 1, -1)) {
+            return true;
+        }
+        if (lineOfFour(a, b, 1, 0)) {
+            return true;
+        }
+        if (lineOfFour(a, b, 1, 1)) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean lineOfFour(int a, int b, int c, int d) {
+        Piece color = Boards[a][b].piece;
+
+        for (int i = 1; i < 4; i++) {
+            if (a + c * i < 0 || b + d * i < 0 || a + c * i >= Boards.length || b + d * i >= Boards[0].length) {
+                return false;
+            }
+            if (Boards[a + c * i][b + d * i].piece != color) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static void main(String[] args) {
+        new ConnectFour(true);
+    }
+}
