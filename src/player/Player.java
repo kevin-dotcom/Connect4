@@ -35,7 +35,8 @@ public class Player {
 				return;
 			}
 		} catch (NumberFormatException e) {
-			e.printStackTrace();
+			GameLoop.stopRunning();
+			return;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
