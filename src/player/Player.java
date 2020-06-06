@@ -35,7 +35,7 @@ public class Player {
 			// Will only remain for testing purposes / until GUI is created
 			try {
 				int column = Integer.parseInt(reader.readLine());
-				boolean placedChip = Board.placeChip(colour, column);
+				boolean placedChip = Board.placeChip(column, colour);
 				if (!placedChip) {
 					System.out.println("That move was invalid!");
 					return;

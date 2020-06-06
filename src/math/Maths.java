@@ -2,6 +2,28 @@ package math;
 
 public class Maths {
 	
+	// Distance
+	
+	public static int getDistance(int c1, int r1, int c2, int r2) {
+		return getDistance(c2 - c1, r2 - r1);
+	}
+	
+	public static int getDistance(int dc, int dr) {
+		return Math.max(Math.abs(dc), Math.abs(dr));
+	}
+	
+	// Conditionals ----------
+	
+	public static boolean inRange(int val, int min, int max) {
+		return val >= min && val <= max;
+	}
+	
+	public static boolean inRange(double val, double min, double max) {
+		return val >= min && val <= max;
+	}
+	
+	// Time Conversion ----------
+	
 	public static String secondsToCombination(double s) {
 		return millisecondsToCombination(s * 1000.0);
 	}
@@ -46,6 +68,7 @@ public class Maths {
 		return time;
 	}
 	
+	// Average ----------
 	public static double getAverage(double x, double y, double dx, double dy) {
 		return (x * y + dy) / (x + dx);
 	}

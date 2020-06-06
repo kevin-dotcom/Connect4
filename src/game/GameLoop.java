@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import components.Board;
+import event.Move;
+import event.MovesList;
 import file.FileIO;
 import player.Computer;
 import player.Player;
@@ -13,13 +15,14 @@ import statistics.Timer;
 
 public class GameLoop {
 	
-	private static String move;
+	private static Move move;
 	private static boolean isRunning = true;
 	private static boolean isPlayer1Turn = true;
 	private static boolean isWaitingForMove = false;
 	private static Player[] players = new Player[2];
 	
 	private static GameStatistics gs;
+	private static MovesList moves;
 	
 	public static void writeStatistics() {
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy_MM_dd HH_mm_ss");  
@@ -35,7 +38,11 @@ public class GameLoop {
 		System.out.println("Written game statistics to " + filename);
 	}
 	
-	public static void setMove(String move) {
+	public static MovesList getMovesList() {
+		return moves;
+	}
+	
+	public static void setMove(Move move) {
 		GameLoop.move = move;
 	}
 	
@@ -49,7 +56,7 @@ public class GameLoop {
 	
 	public static void main(String[] args) {
 		players[0] = new Player("Player 1", 'r');
-		players[1] = new Computer('y');
+		players[1] = new Computer('y', players[0]);
 		Timer.createTimer("Game");
 		Timer.createTimer(players[0].getName());
 		Timer.createTimer(players[1].getName());
@@ -87,6 +94,7 @@ public class GameLoop {
 //		});
 		
 		gs = new GameStatistics(players[0], players[1]);
+		moves = new MovesList();
 		
 		Timer.startTiming();
 		Timer.startTimer(players[0].getName());
@@ -97,7 +105,11 @@ public class GameLoop {
 				isWaitingForMove = true;
 			}
 			if (move != null) {
-				if (isPlayer1Turn) {
+				if (Board.connect4(move.getRow(), move.getColumn(), move.getColour())) {
+					gs.setWinner(move.getColour() == 'r' ? players[0] : players[1]);
+					isRunning = false;
+				}
+				else if (isPlayer1Turn) {
 					Timer.stopTimer(players[0].getName());
 					Timer.startTimer(players[1].getName());;
 				}
@@ -106,7 +118,7 @@ public class GameLoop {
 					Timer.startTimer(players[0].getName());
 				}
 				
-				gs.update(move);
+				moves.add(move);
 				
 				System.out.println(move);
 				isPlayer1Turn = !isPlayer1Turn;

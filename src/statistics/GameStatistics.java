@@ -1,12 +1,12 @@
 package statistics;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 
+import event.Move;
 import file.FileIO;
+import game.GameLoop;
 import math.Maths;
+import player.Computer;
 import player.Player;
 
 public class GameStatistics {
@@ -14,8 +14,8 @@ public class GameStatistics {
 	private int numMovesA, numMovesB;
 	private double timePerMoveA, timePerMoveB;
 	private long totalTimeA, totalTimeB, gameTime;
-	private List<String> moves = new ArrayList<>();
 	private Player playerA, playerB;
+	private Player winner;
 	
 	private static String readValue(String text, String token) {
 		int index = text.indexOf(token);
@@ -33,14 +33,6 @@ public class GameStatistics {
 		this.playerA = playerA;
 		this.playerB = playerB;
 	}
-
-	public void update(String move) {
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");  
-		LocalDateTime now = LocalDateTime.now();  
-		String date = dtf.format(now);
-		
-		moves.add('[' + date + "]: " + move);
-	}
 	
 	public void setTime(Timer timerA, Timer timerB, Timer totalTime) {
 		List<Long> moveTimesA = timerA.getMoveTimes();
@@ -57,6 +49,10 @@ public class GameStatistics {
 		timePerMoveB = (double)totalTimeB / (double)numMovesB;
 	}
 	
+	public void setWinner(Player winner) {
+		this.winner = winner;
+	}
+	
 	public void updateComputerAverageStatistics() {
 		String filepath = "Statistics/Computer Statistics.txt";
 		
@@ -64,6 +60,7 @@ public class GameStatistics {
 			String contents = FileIO.readFile(filepath);
 			
 			int gamesPlayed = Integer.parseInt(readValue(contents, "Total Games Played: "));
+			int gamesWon = Integer.parseInt(readValue(contents, "Total Games Won: "));
 			double avgGameTime = Maths.timeToSeconds(readValue(contents, "Average Game Time: "));
 			double fastestGameTime = Maths.timeToSeconds(readValue(contents, "Fastest Game Time: "));
 			double avgMovesMade = Double.parseDouble(readValue(contents, "Average Moves Made: "));
@@ -96,6 +93,8 @@ public class GameStatistics {
 		else {
 			FileIO.beginWriting(filepath);
 			FileIO.println("Total Games Played: 1");
+			FileIO.printf("Total Games Won: %d", winner != null && !(winner instanceof Computer) ? 1 : 0);
+			FileIO.printf("W/L Ratio: %.2f", winner != null && !(winner instanceof Computer) ? 1.0 : 0.0);
 			FileIO.printf("Average Game Time: %s%n", Maths.millisecondsToCombination(gameTime));
 			FileIO.printf("Fastest Game Time: %s%n", Maths.millisecondsToCombination(gameTime));
 			FileIO.printf("Average Moves Made: %.2f%n", (double)numMovesA);
@@ -103,8 +102,6 @@ public class GameStatistics {
 			FileIO.printf("Average Move Time: %s%n", Maths.millisecondsToCombination(timePerMoveA));
 			
 			// TODO: Check who won the game
-			
-//			FileIO.printf("Games Won: %d", gamesWon);
 			
 			FileIO.endWriting();
 		}
@@ -123,10 +120,15 @@ public class GameStatistics {
 		output += "Number of Moves: " + numMovesB + '\n';
 		output += "Average Time per Move: " + ((double)timePerMoveB / 1000.0) + "s\n";
 		output += "Total time: " + ((double)totalTimeB / 1000.0) + "s\n";
+		
+		if (winner != null) {
+			output += "Winner: " + winner.getName() + '\n';
+		}
+		
 		output += "----------\n";
 		
-		for (String move : moves) {
-			output += move + '\n';
+		for (Move move : GameLoop.getMovesList().getList()) {
+			output += move.toString() + '\n';
 		}
 		
 		return output;
