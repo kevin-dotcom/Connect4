@@ -2,12 +2,13 @@ package file;
 
 import java.io.*;
 
+import statistics.GameStatistics;
+
 public class FileIO {
 	
 	private static BufferedReader reader;
 	private static PrintWriter writer;
 	private static boolean isWriting;
-	
 	
 	public static void beginWriting(String filepath) {
 		try {
@@ -15,7 +16,11 @@ public class FileIO {
 				throw new IOException("PrintWriter never closed!");
 			}
 			else {
-				writer = new PrintWriter(filepath);
+				File file = new File(filepath);
+				
+				file.getParentFile().mkdirs();
+				
+				writer = new PrintWriter(file);
 				isWriting = true;
 			}
 		} catch (IOException e) {
@@ -25,6 +30,7 @@ public class FileIO {
 	
 	public static void endWriting() {
 		writer.close();
+		isWriting = false;
 	}
 	
 	public static void println() {
@@ -39,6 +45,10 @@ public class FileIO {
 		writer.print(str);
 	}
 	
+	public static void print(GameStatistics gs) {
+		println(gs.toString());
+	}
+	
 	public static void printf(String format, Object...args) {
 		writer.printf(format, args);
 	}
@@ -50,7 +60,8 @@ public class FileIO {
 			
 			String line = reader.readLine();
 			while (line != null) {
-				text += line;
+				text += line + '\n';
+				line = reader.readLine();
 			}
 			
 			return text;
@@ -61,6 +72,10 @@ public class FileIO {
 		}
 		
 		return null;
+	}
+	
+	public static boolean fileExists(String filePath) {
+		return new File(filePath).exists();
 	}
 	
 }

@@ -1,31 +1,22 @@
 package player;
 
-import game.GameLoop;
+import components.Board;
 
-public class Computer extends Player implements Runnable {
-
-	private Thread thread = new Thread(this);
-	private boolean makeMove;
+public class Computer extends Player {
 
 	public Computer(char colour) {
 		super("Computer", colour);
-		thread.start();
 	}
 
 	@Override
 	public void requestMove() {
-		makeMove = true;
-	}
-
-	@Override
-	public void run() {
-		while (GameLoop.isRunning()) {
-			if (makeMove) {
-				System.out.println("Computer move");
-				GameLoop.setMove('y' + " 0 0");
-				makeMove = false;
+		new Thread(() -> {
+			boolean placedChip = Board.placeChip(colour, 0);
+			if (!placedChip) {
+				System.out.println("That move was invalid!");
+				return;
 			}
-		}
+		}).start();
 	}
 
 }

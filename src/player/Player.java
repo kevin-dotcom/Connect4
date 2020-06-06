@@ -8,9 +8,7 @@ import game.GameLoop;
 public class Player {
 	
 	private String name;
-	private char colour;
-	private long totalTimeMiilis;
-	private int moves;
+	protected char colour;
 	
 	// Temporary: Will only remain until Window class is created
 	private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -21,25 +19,42 @@ public class Player {
 	}
 	
 	public void requestMove() {
-		// Will be added when GUI implemented
-		// Window.enableInputButtons();
-		// Window.setCurrentPlayerColour(colour);
-		
-		// TEMPORARY
-		// Will only remain for testing purposes / until GUI is created
-		try {
-			int column = Integer.parseInt(reader.readLine());
-			boolean placedChip = Board.placeChip(colour, column);
-			if (!placedChip) {
-				System.out.println("That move was invalid!");
+		new Thread(() -> {
+			// TODO: Get working with GUI
+			
+			// Enable buttons
+			
+			// Will be added when GUI implemented
+			// Window.enableInputButtons();
+			
+			// TODO: Customize button to reflect chip colour
+			
+			// Window.setCurrentPlayerColour(colour);
+
+			// TEMPORARY
+			// Will only remain for testing purposes / until GUI is created
+			try {
+				int column = Integer.parseInt(reader.readLine());
+				boolean placedChip = Board.placeChip(colour, column);
+				if (!placedChip) {
+					System.out.println("That move was invalid!");
+					return;
+				}
+			} catch (NumberFormatException e) {
+				GameLoop.stopRunning();
 				return;
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-		} catch (NumberFormatException e) {
-			GameLoop.stopRunning();
-			return;
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		}).start();
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public char getColour() {
+		return colour;
 	}
 	
 }

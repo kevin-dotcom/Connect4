@@ -9,6 +9,7 @@ public class Timer {
 	private static boolean isTiming;
 	
 	private List<Long> moveTimes = new ArrayList<>();
+	private long lastStartedTime;
 	private long totalTime;
 	
 	private boolean isRunning = false;
@@ -31,6 +32,7 @@ public class Timer {
 	}
 	
 	private void startTimer() {
+		lastStartedTime = System.currentTimeMillis();
 		updateTimers();
 		isRunning = true;
 		moveTimes.add(0l);
@@ -55,8 +57,16 @@ public class Timer {
 			long delta = currentTime - previousTime;
 			
 			for (String key : timers.keySet()) {
-				timers.get(key).update(delta);
+				Timer timer = timers.get(key);
+				
+				if (timer.lastStartedTime > previousTime) {
+					continue;
+				}
+				
+				timer.update(delta);
 			}
+			
+			previousTime = currentTime;
 		}
 	}
 	
