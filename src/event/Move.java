@@ -50,7 +50,7 @@ public class Move {
 
 	@Override
 	public String toString() {
-		return '[' + time + "]: " + colour + " " + r + " " + c;
+		return '[' + time + "]: " + (colour == 'r' ? "Red" : "Yellow") + " " + r + " " + c;
 	}
 	
 }

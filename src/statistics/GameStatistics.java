@@ -81,7 +81,10 @@ public class GameStatistics {
 			}
 			
 			FileIO.beginWriting(filepath);
-			FileIO.printf("Total Games Played: %d%n", gamesPlayed + 1);
+			
+			FileIO.printf("Total Games Played: %d%n", ++gamesPlayed);
+			FileIO.printf("Total Games Won: %d%n", winner != null && !(winner instanceof Computer) ? ++gamesWon : gamesWon);
+			FileIO.printf("W/L Ratio: %.2f%n", (double)gamesWon / gamesPlayed);
 			FileIO.printf("Average Game Time: %s%n", Maths.secondsToCombination(avgGameTime));
 			FileIO.printf("Fastest Game Time: %s%n", Maths.secondsToCombination(fastestGameTime));
 			FileIO.printf("Average Moves Made: %.2f%n", avgMovesMade);
@@ -92,16 +95,15 @@ public class GameStatistics {
 		}
 		else {
 			FileIO.beginWriting(filepath);
+			
 			FileIO.println("Total Games Played: 1");
-			FileIO.printf("Total Games Won: %d", winner != null && !(winner instanceof Computer) ? 1 : 0);
-			FileIO.printf("W/L Ratio: %.2f", winner != null && !(winner instanceof Computer) ? 1.0 : 0.0);
+			FileIO.printf("Total Games Won: %d%n", winner != null && !(winner instanceof Computer) ? 1 : 0);
+			FileIO.printf("W/L Ratio: %.2f%n", winner != null && !(winner instanceof Computer) ? 1.0 : 0.0);
 			FileIO.printf("Average Game Time: %s%n", Maths.millisecondsToCombination(gameTime));
 			FileIO.printf("Fastest Game Time: %s%n", Maths.millisecondsToCombination(gameTime));
 			FileIO.printf("Average Moves Made: %.2f%n", (double)numMovesA);
 			FileIO.printf("Least Moves Made: %d%n", numMovesA);
 			FileIO.printf("Average Move Time: %s%n", Maths.millisecondsToCombination(timePerMoveA));
-			
-			// TODO: Check who won the game
 			
 			FileIO.endWriting();
 		}
@@ -109,19 +111,21 @@ public class GameStatistics {
 	
 	@Override
 	public String toString() {
-		String output = "Game Length: " + ((double)gameTime / 1000.0) + "s\n";
+		String output = String.format("Game Length: %.2fs%n", (double)gameTime / 1000.0);
 		output += playerA.getName() + " (" + (playerA.getColour() == 'r' ? "red" : "yellow") + ")\n";
 		output += "----------\n";
 		output += "Number of Moves: " + numMovesA + '\n';
-		output += "Average Time per Move: " + ((double)timePerMoveA / 1000.0) + "s\n";
-		output += "Total time: " + ((double)totalTimeA / 1000.0) + "s\n";
+		output += String.format("Average Time per Move: %.2fs%n", (double)timePerMoveA / 1000.0);
+		output += String.format("Total Time: %.2fs%n", (double)totalTimeA / 1000.0);
+		output += "----------\n";
 		output += playerB.getName() + " (" + (playerB.getColour() == 'r' ? "red" : "yellow") + ")\n";
 		output += "----------\n";
 		output += "Number of Moves: " + numMovesB + '\n';
-		output += "Average Time per Move: " + ((double)timePerMoveB / 1000.0) + "s\n";
-		output += "Total time: " + ((double)totalTimeB / 1000.0) + "s\n";
+		output += String.format("Average Time per Move: %.2fs%n", (double)timePerMoveB / 1000.0);
+		output += String.format("Total Time: %.2fs%n", (double)totalTimeB / 1000.0);
 		
 		if (winner != null) {
+			output += "----------\n";
 			output += "Winner: " + winner.getName() + '\n';
 		}
 		

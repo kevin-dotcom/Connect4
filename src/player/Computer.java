@@ -66,7 +66,6 @@ public class Computer extends Player {
 
 					@Override
 					public int compare(Integer c1, Integer c2) {
-						// TODO Auto-generated method stub
 						return Integer.compare(Maths.getDistance(3 - c1, 0), Maths.getDistance(3 - c2, 0));
 					}
 					
@@ -122,7 +121,6 @@ public class Computer extends Player {
 
 				@Override
 				public int compare(Integer c1, Integer c2) {
-					// TODO Auto-generated method stub
 					return Integer.compare(Maths.getDistance(3 - c1, 0), Maths.getDistance(3 - c2, 0));
 				}
 				
