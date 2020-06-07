@@ -63,11 +63,11 @@ public class Board {
 		return longest;
 	}
 	
-	public static int longestInARow(int r, int c, char colour, boolean requireCurrentCellColour, Direction... directions) {
+	public static int longestInARow(int r, int c, char colour, boolean requireStartingCellColour, Direction... directions) {
 		if (!Maths.inRange(r, 0, 5) || !Maths.inRange(c, 0, 6)) {
 			return 0;
 		}
-		else if (requireCurrentCellColour && grid[r][c] != colour) {
+		else if (requireStartingCellColour && grid[r][c] != colour) {
 			return 0;
 		}
 		else {

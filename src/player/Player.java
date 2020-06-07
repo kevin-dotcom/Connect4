@@ -8,7 +8,9 @@ import game.GameLoop;
 public class Player {
 	
 	private String name;
+	
 	protected char colour;
+	protected Thread thread;
 	
 	// Temporary: Will only remain until Window class is created
 	private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -19,7 +21,7 @@ public class Player {
 	}
 	
 	public void requestMove() {
-		new Thread(() -> {
+		thread = new Thread(() -> {
 			// TODO: Get working with GUI
 			
 			// Enable buttons
@@ -50,7 +52,15 @@ public class Player {
 					e.printStackTrace();
 				}
 			}
-		}).start();
+		});
+		
+		thread.start();
+	}
+	
+	public void close() {
+		if (thread != null) {
+			thread.interrupt();
+		}
 	}
 	
 	public String getName() {

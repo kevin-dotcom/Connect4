@@ -17,7 +17,7 @@ public class Computer extends Player {
 
 	@Override
 	public void requestMove() {
-		new Thread(() -> {
+		thread = new Thread(() -> {
 			int[] movePriority = new int[7];
 			Arrays.fill(movePriority, Integer.MAX_VALUE);
 			
@@ -141,7 +141,9 @@ public class Computer extends Player {
 				}
 				Board.placeChip(bestMove, colour);
 			}
-		}).start();
+		});
+		
+		thread.start();
 	}
 
 }

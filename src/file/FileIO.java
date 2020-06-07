@@ -2,6 +2,9 @@ package file;
 
 import java.io.*;
 
+import javax.imageio.ImageIO;
+
+import components.Image;
 import statistics.GameStatistics;
 
 public class FileIO {
@@ -79,6 +82,17 @@ public class FileIO {
 	
 	public static boolean fileExists(String filePath) {
 		return new File(filePath).exists();
+	}
+	
+	public static Image readImage(String filepath) {
+		try {
+			return new Image(ImageIO.read(new File(filepath)));
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
+		
+		return null;
 	}
 	
 }

@@ -6,6 +6,7 @@ import components.Board;
 import event.Move;
 import event.MovesList;
 import file.FileIO;
+import gui.Window;
 import player.Computer;
 import player.Player;
 import statistics.GameStatistics;
@@ -60,34 +61,7 @@ public class GameLoop {
 		
 		// TODO: Create Window Class
 		
-//		Window.init();
-		
-//		Window.addWindowListener(new WindowListener() {
-//
-//			@Override
-//			public void windowOpened(WindowEvent e) {}
-//
-//			@Override
-//			public void windowClosing(WindowEvent e) {
-//				isRunning = false;
-//			}
-//
-//			@Override
-//			public void windowClosed(WindowEvent e) {}
-//
-//			@Override
-//			public void windowIconified(WindowEvent e) {}
-//
-//			@Override
-//			public void windowDeiconified(WindowEvent e) {}
-//
-//			@Override
-//			public void windowActivated(WindowEvent e) {}
-//
-//			@Override
-//			public void windowDeactivated(WindowEvent e) {}
-//			
-//		});
+		Window.init();
 		
 		gs = new GameStatistics(players[0], players[1]);
 		moves = new MovesList();
@@ -101,6 +75,8 @@ public class GameLoop {
 				isWaitingForMove = true;
 			}
 			if (move != null) {
+				Window.getCanvas().clear();
+				Window.update();
 				if (Board.connect4(move.getRow(), move.getColumn(), move.getColour())) {
 					gs.setWinner(move.getColour() == 'r' ? players[0] : players[1]);
 					isRunning = false;
@@ -135,6 +111,10 @@ public class GameLoop {
 		
 		if (players[1] instanceof Computer) {
 			gs.updateComputerAverageStatistics();
+		}
+		
+		for (Player player : players) {
+			player.close();
 		}
 		
 		System.out.print("Enter YES to save game statistics, or NO to exit game: ");
