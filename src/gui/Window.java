@@ -73,11 +73,6 @@ public class Window {
 		frame.addWindowListener(listener);
 	}
 	
-	public static void update() {
-		canvas.revalidate();
-		canvas.repaint();
-	}
-	
 	public static BoardCanvas getCanvas() {
 		return canvas;
 	}

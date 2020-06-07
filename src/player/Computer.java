@@ -5,23 +5,41 @@ import java.util.*;
 import components.Board;
 import math.Maths;
 
+/**
+ * Name: Kevin Zhang
+ * Teacher: Mr. Anandarajan
+ * Date: 06-07-2020
+ * Description: Computer.
+*/
 public class Computer extends Player {
-
+	
+	/**
+	 * Stores the player.
+	 */
 	private Player player;
 	
+	/**
+	 * Creates a computer.
+	 * @param colour the colour.
+	 * @param player the player.
+	 */
 	public Computer(char colour, Player player) {
 		super("Computer", colour);
 		
 		this.player = player;
 	}
-
+	
 	@Override
+	/**
+	 * Creates a thread and makes a move.
+	 */
 	public void requestMove() {
 		thread = new Thread(() -> {
-			int[] movePriority = new int[7];
+			int[] movePriority = new int[7]; // Lower priority value means computer should make the move
 			Arrays.fill(movePriority, Integer.MAX_VALUE);
 			
 			boolean playerHasGoodMove = false;
+			// Loop through columns and check next 3 possible position to determine priority
 			for (int i = 0; i < 7; i++) {
 				for (int j = Board.tops[i]; j < Board.tops[i] + 3 && j <= 6; j++) {
 					int longestPossible = Board.longestInARow(j, i, player.colour, false);
@@ -47,7 +65,7 @@ public class Computer extends Player {
 				}
 			}
 			
-			if (playerHasGoodMove) {
+			if (playerHasGoodMove) { // Stop player from making good move
 				List<Integer> bestMoves = new ArrayList<>();
 				int bestMovePriority = 4;
 				
@@ -62,7 +80,7 @@ public class Computer extends Player {
 					}
 				}
 				
-				bestMoves.sort(new Comparator<Integer>() {
+				bestMoves.sort(new Comparator<Integer>() { // If tied, block player by placing closest to centre
 
 					@Override
 					public int compare(Integer c1, Integer c2) {
@@ -75,6 +93,7 @@ public class Computer extends Player {
 				return;
 			}
 			
+			// Loops through column to check if the computer has a good move
 			for (int i = 0; i < 7; i++) {
 				for (int j = Board.tops[i]; j < Board.tops[i] + 3 && j <= 6; j++) {
 					int longestPossible = Board.longestInARow(j, i, colour, false);
@@ -104,6 +123,7 @@ public class Computer extends Player {
 				}
 			}
 			
+			// Get best move(s)
 			List<Integer> bestMoves = new ArrayList<>();
 			int bestMovePriority = Integer.MAX_VALUE;
 			for (int i = 0; i < 7; i++) {
@@ -117,7 +137,7 @@ public class Computer extends Player {
 				}
 			}
 			
-			bestMoves.sort(new Comparator<Integer>() {
+			bestMoves.sort(new Comparator<Integer>() { // Sort by proximity to the centre column
 
 				@Override
 				public int compare(Integer c1, Integer c2) {
@@ -126,10 +146,12 @@ public class Computer extends Player {
 				
 			});
 			
-			if (bestMoves.size() == 1) {
+			if (bestMoves.size() == 1) { // Has one good move
 				Board.placeChip(bestMoves.get(0), colour);
 			}
 			else {
+				// Block the player
+				
 				int bestMove = -1, moveClosestPlayerChip = 7;
 				for (int i = 0; i < bestMoves.size(); i++) {
 					int c = bestMoves.get(i);

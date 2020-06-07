@@ -2,12 +2,36 @@ package event;
 
 import statistics.Timer;
 
+/**
+ * Name: Kevin Zhang
+ * Teacher: Mr. Anandarajan
+ * Date: 06-07-2020
+ * Description: Stores information about a move.
+*/
+
 public class Move {
 	
+	/**
+	 * The time a move was made, in the format 'HH:mm::ss'.
+	 */
 	private String time;
+	
+	/**
+	 * The position of the move.
+	 */
 	private int r, c;
+	
+	/**
+	 * The colour of the chip involved.
+	 */
 	private char colour;
 	
+	/**
+	 * Creates a Move at the given position and colour.
+	 * @param r the row.
+	 * @param c the column.
+	 * @param colour the colour.
+	 */
 	public Move(int r, int c, char colour) {
 		String time = Timer.getCurrentTime("HH:mm:ss");
 		

@@ -1,5 +1,11 @@
 package math;
 
+/**
+ * Name: Kevin Zhang
+ * Teacher: Mr. Anandarajan
+ * Date: 06-07-2020
+ * Description: Maths.
+*/
 public class Maths {
 	
 	// Distance
