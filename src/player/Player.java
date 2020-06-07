@@ -33,18 +33,22 @@ public class Player {
 
 			// TEMPORARY
 			// Will only remain for testing purposes / until GUI is created
-			try {
-				int column = Integer.parseInt(reader.readLine());
-				boolean placedChip = Board.placeChip(column, colour);
-				if (!placedChip) {
-					System.out.println("That move was invalid!");
+			while (true) {
+				try {
+					int column = Integer.parseInt(reader.readLine());
+					boolean placedChip = Board.placeChip(column, colour);
+					if (!placedChip) {
+						System.out.println("That move was invalid!");
+					}
+					else {
+						return;
+					}
+				} catch (NumberFormatException e) {
+					GameLoop.stopRunning();
 					return;
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
-			} catch (NumberFormatException e) {
-				GameLoop.stopRunning();
-				return;
-			} catch (IOException e) {
-				e.printStackTrace();
 			}
 		}).start();
 	}

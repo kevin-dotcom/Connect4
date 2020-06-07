@@ -1,5 +1,6 @@
 package components;
 
+import java.util.Arrays;
 import java.util.List;
 
 import event.Move;
@@ -45,6 +46,10 @@ public class Board {
 	
 	public static boolean connect4(int r, int c, char colour) {
 		return longestInARow(r, c, colour, true) >= 4;
+	}
+	
+	public static boolean canMove() {
+		return Arrays.stream(tops).filter(top -> top < 6).count() > 0;
 	}
 	
 	public static int longestInARow(int r, int c, char colour, boolean requireStartingCellColour) {

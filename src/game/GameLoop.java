@@ -1,8 +1,6 @@
 package game;
 
 import java.io.*;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 import components.Board;
 import event.Move;
@@ -25,9 +23,7 @@ public class GameLoop {
 	private static MovesList moves;
 	
 	public static void writeStatistics() {
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy_MM_dd HH_mm_ss");  
-		LocalDateTime now = LocalDateTime.now();  
-		String date = dtf.format(now);
+		String date = Timer.getCurrentTime("yyyy_MM_dd HH_mm_ss");
 		
 		String filename = "Statistics/Game Statistics/Game Statistics " + date + ".txt";
 		
@@ -56,7 +52,8 @@ public class GameLoop {
 	
 	public static void main(String[] args) {
 		players[0] = new Player("Player 1", 'r');
-		players[1] = new Computer('y', players[0]);
+		players[1] = new Player("Player 2", 'y');
+		
 		Timer.createTimer("Game");
 		Timer.createTimer(players[0].getName());
 		Timer.createTimer(players[1].getName());
@@ -73,7 +70,6 @@ public class GameLoop {
 //			@Override
 //			public void windowClosing(WindowEvent e) {
 //				isRunning = false;
-//				System.out.println("hi");
 //			}
 //
 //			@Override
@@ -107,6 +103,9 @@ public class GameLoop {
 			if (move != null) {
 				if (Board.connect4(move.getRow(), move.getColumn(), move.getColour())) {
 					gs.setWinner(move.getColour() == 'r' ? players[0] : players[1]);
+					isRunning = false;
+				}
+				else if (!Board.canMove()) {
 					isRunning = false;
 				}
 				else if (isPlayer1Turn) {

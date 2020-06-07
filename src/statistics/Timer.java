@@ -1,5 +1,7 @@
 package statistics;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class Timer {
@@ -13,6 +15,12 @@ public class Timer {
 	private long totalTime;
 	
 	private boolean isRunning = false;
+	
+	public static String getCurrentTime(String format) {
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern(format);  
+		LocalDateTime now = LocalDateTime.now();  
+		return dtf.format(now);
+	}
 	
 	public static void createTimer(String id) {
 		timers.put(id, new Timer());

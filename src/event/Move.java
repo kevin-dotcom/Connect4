@@ -1,7 +1,6 @@
 package event;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import statistics.Timer;
 
 public class Move {
 	
@@ -10,9 +9,7 @@ public class Move {
 	private char colour;
 	
 	public Move(int r, int c, char colour) {
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");  
-		LocalDateTime now = LocalDateTime.now();  
-		String time = dtf.format(now);
+		String time = Timer.getCurrentTime("HH:mm:ss");
 		
 		this.time = time;
 		this.r = r;

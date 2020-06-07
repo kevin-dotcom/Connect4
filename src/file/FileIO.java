@@ -25,6 +25,7 @@ public class FileIO {
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
+			System.exit(1);
 		}
 	}
 	
@@ -67,8 +68,10 @@ public class FileIO {
 			return text;
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
+			System.exit(1);
 		} catch (IOException e) {
 			e.printStackTrace();
+			System.exit(1);
 		}
 		
 		return null;
