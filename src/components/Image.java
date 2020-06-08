@@ -19,11 +19,6 @@ public class Image {
 	private BufferedImage image;
 	
 	/**
-	 * Position to be drawn.
-	 */
-	int x, y;
-	
-	/**
 	 * Creates the image.
 	 * @param image the image.
 	 */
@@ -60,31 +55,18 @@ public class Image {
 	}
 	
 	/**
-	 * @return the x-position.
+	 * @return the width of the image.
 	 */
-	public int getX() {
-		return x;
+	public int getWidth() {
+		return image.getWidth();
 	}
 	
 	/**
-	 * @param x the new x-position.
+	 * The height of the image.
+	 * @return
 	 */
-	public void setX(int x) {
-		this.x = x;
-	}
-	
-	/**
-	 * @return the y-position.
-	 */
-	public int getY() {
-		return y;
-	}
-	
-	/**
-	 * @param y the new y-position.
-	 */
-	public void setY(int y) {
-		this.y = y;
+	public int getHeight() {
+		return image.getHeight();
 	}
 	
 }

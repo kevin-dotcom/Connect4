@@ -102,7 +102,7 @@ public class GameLoop {
 		// TODO: Set players via GUI
 		
 		players[0] = new Player("Player 1", 'r');
-		players[1] = new Player("Player 2", 'y');
+		players[1] = new Computer('y', players[0]);
 		
 		// Create timers
 		
@@ -156,12 +156,17 @@ public class GameLoop {
 				isPlayer1Turn = !isPlayer1Turn;
 				isWaitingForMove = false;
 				move = null;
+				
+				Board.logGrid();
+				Window.getCanvas().update();
 			}
 			
 			// Update the timers.
 			
 			Timer.updateTimers();
 		}
+		
+		Window.dispose();
 		
 		// Stop the timers
 		

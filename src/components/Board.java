@@ -59,7 +59,7 @@ public class Board {
 	 * @return {@code true} if a chip was placed.
 	 */
 	public static boolean placeChip(int column, char colour) {
-		if (!Maths.inRange(column, 0, 6) && !Maths.inRange(tops[column], 0, 5)) {
+		if (!Maths.inRange(column, 0, 6) || !Maths.inRange(tops[column], 0, 5)) {
 			return false;
 		}
 		
