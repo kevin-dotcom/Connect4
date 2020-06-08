@@ -8,7 +8,6 @@ Connect4 Game for School
 
 **Features to be Implemented:**  
 >GUI  
->Documentation  
 
 **Features Already Implemented:**  
 >Board  
@@ -19,3 +18,4 @@ Connect4 Game for School
 >Statistics  
 >FileIO 
 >Player handling  
+>Documentation  
