@@ -3,13 +3,13 @@ package gui;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.*;
 
 import components.Board;
+import math.Maths;
 import statistics.Timer;
 
 /**
@@ -28,6 +28,8 @@ public class BoardPanel extends JPanel {
 	private Texture blankTexture, redTexture, yellowTexture;
 	private int x, y, offset;
 	
+	Dimension size;
+	
 	private List<Button> buttons = new ArrayList<>();
 	private Button pressedButton;
 	private char currentColour;
@@ -37,10 +39,12 @@ public class BoardPanel extends JPanel {
 		redTexture = TextureLibrary.getTexture("red_chip");
 		yellowTexture = TextureLibrary.getTexture("yellow_chip");
 		
+		size = Window.getAppSize();
+		
 		getBoardSize();
 		resizeTextures();
 		
-		Button menuButton = new TextButton("Menu", 0, 0, 200, 100, new OnClickListener() {
+		Button menuButton = new TextButton("Menu", size.width / 50, size.height / 50, size.width / 10, size.height / 10, new OnClickListener() {
 			
 			@Override
 			public void onClick() {
@@ -54,8 +58,6 @@ public class BoardPanel extends JPanel {
 		
 		buttons.add(menuButton);
 		
-		Dimension size = Window.getAppSize();
-		
 		for (int i = 0; i < 7; i++) {
 			int column = i;
 			
@@ -65,29 +67,14 @@ public class BoardPanel extends JPanel {
 				
 				@Override
 				public void onClick() {
-					Board.placeChip(column, currentColour);
+					boolean placed = Board.placeChip(column, currentColour);
+					if (!placed) {
+						displayChipNotPlacedMessage();
+					}
 				}
 				
 			}));
 		}
-		
-		addKeyListener(new KeyListener() {
-
-			@Override
-			public void keyTyped(KeyEvent e) {
-				Board.placeChip(e.getKeyCode() - '1', currentColour);
-			}
-
-			@Override
-			public void keyPressed(KeyEvent e) {
-			}
-
-			@Override
-			public void keyReleased(KeyEvent e) {
-				Board.placeChip(e.getKeyCode() - '1', currentColour);
-			}
-			
-		});
 		
 		addMouseListener(new MouseListener() {
 			
@@ -133,66 +120,86 @@ public class BoardPanel extends JPanel {
 			
 		});
 		
-		InputMap inmap = getInputMap();
-		ActionMap actmap = getActionMap();
+		InputMap inputMap = getInputMap(WHEN_IN_FOCUSED_WINDOW);
 		
-		inmap.put(KeyStroke.getKeyStroke('1'), "chip_column_one");
-		actmap.put("chip_column_one", new Action() {
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_1, 0, true), "placeColumn1");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_2, 0, true), "placeColumn2");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_3, 0, true), "placeColumn3");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_4, 0, true), "placeColumn4");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_5, 0, true), "placeColumn5");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_6, 0, true), "placeColumn6");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_7, 0, true), "placeColumn7");
+		
+		
+		
+		ActionMap actionMap = getActionMap();
+		
+		for (int i = 1; i <= 7; i++) {
+			int column = i;
+			actionMap.put("placeColumn" + i, new AbstractAction() {
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("Hi");
-			}
+				private static final long serialVersionUID = 323216131492034828L;
 
-			@Override
-			public Object getValue(String key) {
-				return null;
-			}
-
-			@Override
-			public void putValue(String key, Object value) {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					boolean placed = Board.placeChip(column - 1, currentColour);
+					if (!placed) {
+						displayChipNotPlacedMessage();
+					}
+				}
 				
-			}
-
-			@Override
-			public void setEnabled(boolean b) {
-				
-			}
-
-			@Override
-			public boolean isEnabled() {
-				return false;
-			}
-
-			@Override
-			public void addPropertyChangeListener(PropertyChangeListener listener) {
-				
-			}
-
-			@Override
-			public void removePropertyChangeListener(PropertyChangeListener listener) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-		});
+			});
+		}
 	}
 	
+	protected void displayChipNotPlacedMessage() {
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				try {
+					Thread.sleep(50);
+					
+					Graphics g = getGraphics();
+					
+					String text = "Invalid Move!";
+					
+					int width = size.width * 2 / 3;
+					int height = size.height / 20;
+					
+					Font font = Maths.getMaxFittingFontSize(g, new Font("Ariel", Font.BOLD, 1), text, width, height);
+					
+					g.setColor(Color.RED);
+					g.setFont(font);
+					
+					FontMetrics fm = g.getFontMetrics();
+					
+					g.drawString(text, (size.width - fm.stringWidth(text)) / 2, size.height / 20);
+					
+					Thread.sleep(1000);
+					
+					update();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			
+		}).start();
+	}
+
 	private void getBoardSize() {
-		Dimension appSize = Window.getAppSize();
-		
-		int maxX = appSize.width / 7;
-		int maxY = appSize.height * 2 / 15;
+		int maxX = size.width / 7;
+		int maxY = size.height * 2 / 15;
 		int unitSize = Math.min(maxX, maxY);
 	
 		offset = unitSize;
 		
 		if (maxX < maxY) {
-			y = (appSize.height - unitSize * 6) / 2;
+			y = (size.height - unitSize * 6) / 2;
 		}
 		else {
-			x = (appSize.width - unitSize * 7) / 2;
-			y = appSize.height / 14;
+			x = (size.width - unitSize * 7) / 2;
+			y = size.height / 14;
 		}
 	}
 	
