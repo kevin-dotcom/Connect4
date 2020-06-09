@@ -1,4 +1,4 @@
-package components;
+package gui;
 
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
@@ -11,7 +11,7 @@ import java.awt.image.BufferedImage;
  * Description: Stores info and allow modification of images.
 */
 
-public class Image {
+public class Texture {
 	
 	/**
 	 * Image.
@@ -22,7 +22,7 @@ public class Image {
 	 * Creates the image.
 	 * @param image the image.
 	 */
-	public Image(BufferedImage image) {
+	public Texture(BufferedImage image) {
 		this.image = image;
 	}
 	
@@ -32,7 +32,7 @@ public class Image {
 	 * @param scaleHeight the height scale.
 	 * @return an Image object containing the scaled image.
 	 */
-	public Image scale(double scaleWidth, double scaleHeight) {
+	public Texture scale(double scaleWidth, double scaleHeight) {
 	    BufferedImage scaledimage = null;
 	    
 	    if (image != null) {
@@ -44,7 +44,7 @@ public class Image {
 	        g.drawRenderedImage(image, at); // Create
 	    }
 	    
-	    return new Image(scaledimage);
+	    return new Texture(scaledimage);
 	}
 	
 	/**

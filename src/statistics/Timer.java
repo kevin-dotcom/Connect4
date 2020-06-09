@@ -146,7 +146,7 @@ public class Timer {
 	 * @param delta the change in time.
 	 */
 	private void update(long delta) {
-		if (isRunning) {
+		if (isRunning && isTiming) {
 			totalTime += delta;
 			
 			int laps = moveTimes.size();

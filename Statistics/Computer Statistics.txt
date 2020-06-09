@@ -1,0 +1,8 @@
+Total Games Played: 22
+Total Games Won: 0
+W/L Ratio: 0.00
+Average Game Time: 0min 8s 879ms
+Fastest Game Time: 0min 1s 332ms
+Average Moves Made: 4.22
+Least Moves Made: 1
+Average Move Time: 0min 2s 300ms

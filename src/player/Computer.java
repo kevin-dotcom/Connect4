@@ -3,6 +3,7 @@ package player;
 import java.util.*;
 
 import components.Board;
+import gui.Window;
 import math.Maths;
 
 /**
@@ -34,6 +35,8 @@ public class Computer extends Player {
 	 * Creates a thread and makes a move.
 	 */
 	public void requestMove() {
+		Window.disableColourButtons();
+		
 		thread = new Thread(() -> {
 			int[] movePriority = new int[7]; // Lower priority value means computer should make the move
 			Arrays.fill(movePriority, Integer.MAX_VALUE);

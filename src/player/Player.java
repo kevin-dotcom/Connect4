@@ -1,5 +1,7 @@
 package player;
 
+import gui.Window;
+
 /**
  * Name: Kevin Zhang
  * Teacher: Mr. Anandarajan
@@ -37,40 +39,7 @@ public class Player {
 	 * Creates a thread to make a move.
 	 */
 	public void requestMove() {
-//		thread = new Thread(() -> {
-//			// TODO: Get working with GUI
-//			
-//			// Enable buttons
-//			
-//			// Will be added when GUI implemented
-//			// Window.enableInputButtons();
-//			
-//			// TODO: Customize button to reflect chip colour
-//			
-//			// Window.setCurrentPlayerColour(colour);
-//
-//			// TEMPORARY
-//			// Will only remain for testing purposes / until GUI is created
-//			while (true) {
-//				try {
-//					int column = Integer.parseInt(reader.readLine());
-//					boolean placedChip = Board.placeChip(column, colour);
-//					if (!placedChip) {
-//						System.out.println("That move was invalid!");
-//					}
-//					else {
-//						return;
-//					}
-//				} catch (NumberFormatException e) {
-//					GameLoop.stopRunning();
-//					return;
-//				} catch (IOException e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-		
-//		thread.start();
+		Window.enableColourButtons(colour);
 	}
 	
 	/**

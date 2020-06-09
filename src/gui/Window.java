@@ -12,7 +12,7 @@ import game.GameLoop;
 public class Window {
 
 	private static JFrame frame;
-	private static BoardCanvas canvas;
+	private static BoardPanel boardPanel;
 	
 	private static Dimension appSize;
 	
@@ -56,6 +56,7 @@ public class Window {
 		}
 		
 	};
+	
 
 	public static void init() {
 		frame = new JFrame();
@@ -66,14 +67,24 @@ public class Window {
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.setResizable(false);
 		
-		canvas = new BoardCanvas();
-		frame.add(canvas);
+		boardPanel = new BoardPanel();
+		frame.add(boardPanel);
 		
 		frame.setVisible(true);
+		frame.requestFocus();
 	}
 	
 	public static void addWindowListener(WindowListener listener) {
 		frame.addWindowListener(listener);
+	}
+	
+	public static void enableColourButtons(char colour) {
+		boardPanel.setColourButtonsVisible(true);
+		boardPanel.setColourButtonsColour(colour);
+	}
+	
+	public static void disableColourButtons() {
+		boardPanel.setColourButtonsVisible(false);
 	}
 	
 	public static void dispose() {
@@ -83,12 +94,16 @@ public class Window {
 		}
 	}
 	
-	public static BoardCanvas getCanvas() {
-		return canvas;
+	public static BoardPanel getPanel() {
+		return boardPanel;
 	}
 	
 	public static Dimension getAppSize() {
 		return appSize;
 	}
 
+	public static void update() {
+		boardPanel.update();
+	}
+	
 }

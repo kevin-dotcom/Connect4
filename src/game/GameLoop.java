@@ -6,6 +6,7 @@ import components.Board;
 import event.Move;
 import event.MovesList;
 import file.FileIO;
+import gui.TextureLibrary;
 import gui.Window;
 import player.Computer;
 import player.Player;
@@ -102,7 +103,7 @@ public class GameLoop {
 		// TODO: Set players via GUI
 		
 		players[0] = new Player("Player 1", 'r');
-		players[1] = new Computer('y', players[0]);
+		players[1] = new Player("Player 2", 'y');
 		
 		// Create timers
 		
@@ -112,12 +113,14 @@ public class GameLoop {
 		
 		// TODO: Create Window Class
 		
+		TextureLibrary.loadTextures();
 		Window.init();
 		
 		// Initialize
 		
 		gs = new GameStatistics(players[0], players[1]);
 		moves = new MovesList();
+		
 		
 		// Start timing
 		Timer.startTiming();
@@ -158,7 +161,7 @@ public class GameLoop {
 				move = null;
 				
 				Board.logGrid();
-				Window.getCanvas().update();
+				Window.update();
 			}
 			
 			// Update the timers.

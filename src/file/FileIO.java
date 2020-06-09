@@ -4,7 +4,7 @@ import java.io.*;
 
 import javax.imageio.ImageIO;
 
-import components.Image;
+import gui.Texture;
 import statistics.GameStatistics;
 
 /**
@@ -147,9 +147,9 @@ public class FileIO {
 	 * @param filepath the file path.
 	 * @return the image.
 	 */
-	public static Image readImage(String filepath) {
+	public static Texture readTexture(String filepath) {
 		try {
-			return new Image(ImageIO.read(new File(filepath)));
+			return new Texture(ImageIO.read(new File(filepath)));
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.exit(1);
