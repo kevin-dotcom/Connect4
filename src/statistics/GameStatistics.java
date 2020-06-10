@@ -166,6 +166,10 @@ public class GameStatistics {
 		}
 	}
 	
+	public Player getWinner() {
+		return winner;
+	}
+	
 	@Override
 	/**
 	 * Converts it into a string.s

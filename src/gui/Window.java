@@ -7,6 +7,7 @@ import java.awt.event.*;
 import javax.swing.JFrame;
 
 import game.GameLoop;
+import player.Player;
 
 public class Window {
 
@@ -136,6 +137,14 @@ public class Window {
 		}
 
 		return appSize;
+	}
+	
+	public static void showVictoryMessage(Player winner) {
+		boardPanel.showVictoryMessage(winner);
+	}
+	
+	public static void disableInput() {
+		boardPanel.disableInput();
 	}
 
 	public static void update() {

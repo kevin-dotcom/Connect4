@@ -25,6 +25,8 @@ public class BoardPanel extends Panel {
 
 	private static final long serialVersionUID = 8158722145861447126L;
 
+	private boolean gameStarted, gameEnded;
+
 	private Texture blankTexture, redTexture, yellowTexture;
 	private int x, y, offset;
 
@@ -61,9 +63,14 @@ public class BoardPanel extends Panel {
 
 			@Override
 			public void onClick() {
+				if (gameEnded) {
+					return;
+				}
+
 				GameLoop.setPlayers(new Player("Player 1", 'r'), new Player("Player 2", 'y'));
 
 				GameLoop.run();
+				gameStarted = true;
 
 				playAgainstPlayer.setVisible(false);
 				playAgainstComputer.setVisible(false);
@@ -84,6 +91,7 @@ public class BoardPanel extends Panel {
 				GameLoop.setPlayers(player, new Computer('y', player));
 
 				GameLoop.run();
+				gameStarted = true;
 
 				playAgainstPlayer.setVisible(false);
 				playAgainstComputer.setVisible(false);
@@ -104,6 +112,10 @@ public class BoardPanel extends Panel {
 
 				@Override
 				public void onClick() {
+					if (gameEnded) {
+						return;
+					}
+
 					boolean placed = Board.placeChip(column, currentColour);
 					if (!placed) {
 						displayChipNotPlacedMessage();
@@ -113,7 +125,7 @@ public class BoardPanel extends Panel {
 			}));
 		}
 
-		InputMap inputMap = getInputMap(WHEN_IN_FOCUSED_WINDOW);
+		InputMap inputMap = getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW);
 
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_1, 0, true), "placeColumn1");
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_2, 0, true), "placeColumn2");
@@ -122,7 +134,6 @@ public class BoardPanel extends Panel {
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_5, 0, true), "placeColumn5");
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_6, 0, true), "placeColumn6");
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_7, 0, true), "placeColumn7");
-
 
 
 		ActionMap actionMap = getActionMap();
@@ -135,6 +146,10 @@ public class BoardPanel extends Panel {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
+					if (gameEnded) {
+						return;
+					}
+
 					boolean placed = Board.placeChip(column - 1, currentColour);
 					if (!placed) {
 						displayChipNotPlacedMessage();
@@ -145,7 +160,7 @@ public class BoardPanel extends Panel {
 		}
 	}
 
-	protected void displayChipNotPlacedMessage() {
+	private void displayChipNotPlacedMessage() {
 		new Thread(new Runnable() {
 
 			@Override
@@ -180,6 +195,41 @@ public class BoardPanel extends Panel {
 		}).start();
 	}
 
+	public void showVictoryMessage(Player player) {
+		new Thread(() -> {
+			try {
+				Thread.sleep(200);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			Graphics g = getGraphics();
+
+			String text = player.getName() + " Won!";
+
+			int width = size.width * 2 / 3;
+			int height = size.height / 20;
+
+			Font font = Maths.getMaxFittingFontSize(g, new Font("Ariel", Font.BOLD, 1), text, width, height);
+
+			g.setColor(Color.RED);
+			g.setFont(font);
+
+			FontMetrics fm = g.getFontMetrics();
+
+			g.drawString(text, (size.width - fm.stringWidth(text)) / 2, size.height / 20);
+		}).start();
+	}
+
+	public void disableInput() {
+		for (Button button : buttons) {
+			button.setVisible(false);
+		}
+
+		update();
+
+		gameEnded = true;
+	}
+
 	private void getBoardSize() {
 		int maxX = size.width / 7;
 		int maxY = size.height * 2 / 15;
@@ -204,7 +254,7 @@ public class BoardPanel extends Panel {
 
 	@Override
 	protected void paintComponent(Graphics g) {
-		if (GameLoop.isRunning()) {
+		if (gameStarted) {
 
 			g.setColor(new Color(20, 20, 230));
 			g.fillRect(x, y, offset * 7, offset * 6);
@@ -239,7 +289,7 @@ public class BoardPanel extends Panel {
 
 	@Override
 	public void onMouseReleased(MouseEvent e) {
-		if (e.getButton() != MouseEvent.BUTTON1) {
+		if (e.getButton() != MouseEvent.BUTTON1 || gameEnded) {
 			return;
 		}
 
@@ -258,7 +308,7 @@ public class BoardPanel extends Panel {
 
 	@Override
 	public void onMousePressed(MouseEvent e) {
-		if (e.getButton() != MouseEvent.BUTTON1) {
+		if (e.getButton() != MouseEvent.BUTTON1 || gameEnded) {
 			return;
 		}
 
@@ -304,8 +354,6 @@ public class BoardPanel extends Panel {
 				button.resizeTextures();
 			}
 		}
-
-
 
 		update();
 	}

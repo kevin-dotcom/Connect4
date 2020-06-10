@@ -163,9 +163,10 @@ public class GameLoop {
 
 				Timer.updateTimers();
 			}
-
-			Window.dispose();
-
+			
+			Window.disableInput();
+			Window.showVictoryMessage(gs.getWinner());
+			
 			// Stop the timers
 
 			Timer.stopTiming();
