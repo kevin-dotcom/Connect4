@@ -5,11 +5,33 @@ import java.awt.image.ImageObserver;
 
 import math.Maths;
 
+/**
+ * Name: Kevin Zhang
+ * Teacher: Mr. Anandarajan
+ * Date: 06-10-2020
+ * Description: Button that contains text.
+*/
 public class TextButton extends Button {
 	
+	/**
+	 * The text.
+	 */
 	private String text;
+	
+	/**
+	 * The font.
+	 */
 	private Font font;
 	
+	/**
+	 * Creates the button.
+	 * @param text the text.
+	 * @param x the x-position.
+	 * @param y the y-position.
+	 * @param width the width.
+	 * @param height the height.
+	 * @param onClick what happens on a click.
+	 */
 	public TextButton(String text, int x, int y, int width, int height, OnClickListener onClick) {
 		super(x, y, width, height, TextureLibrary.getTexture("text_button"), TextureLibrary.getTexture("pressed_text_button"), onClick);
 		
@@ -17,11 +39,15 @@ public class TextButton extends Button {
 	}
 	
 	@Override
+	/**
+	 * Paints this button.
+	 */
 	public void paint(Graphics g, ImageObserver observer) {
 		if (!isVisible) {
 			return;
 		}
 		
+		// Gets biggest font that fits in this button
 		if (font == null) {
 			int fontSize = 1;
 			

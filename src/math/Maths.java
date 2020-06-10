@@ -85,6 +85,8 @@ public class Maths {
 	// Font ----------
 	
 	public static Font getMaxFittingFontSize(Graphics g, Font font, String string, int width, int height) {
+		// Finds biggest font that fits in the given width by binary search
+		
 		int minSize = 0;
 		int maxSize = 288;
 		int curSize = font.getSize();

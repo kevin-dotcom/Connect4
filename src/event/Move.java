@@ -70,6 +70,9 @@ public class Move {
 	}
 
 	@Override
+	/**
+	 * String representation of this class.
+	 */
 	public String toString() {
 		return '[' + time + "]: " + (colour == 'r' ? "Red" : "Yellow") + " " + r + " " + c;
 	}

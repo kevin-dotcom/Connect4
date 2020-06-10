@@ -18,24 +18,59 @@ import statistics.Timer;
  * Name: Kevin Zhang
  * Teacher: Mr. Anandarajan
  * Date: 06-07-2020
- * Description: Canvas to draw images.
+ * Description: Panel containing the game board.
  */
-
 public class BoardPanel extends Panel {
 
 	private static final long serialVersionUID = 8158722145861447126L;
-
+	
+	/**
+	 * Stores if the game has started or ended.
+	 */
 	private boolean gameStarted, gameEnded;
-
+	
+	/**
+	 * Textures of the chips.
+	 */
 	private Texture blankTexture, redTexture, yellowTexture;
-	private int x, y, offset;
-
+	
+	/**
+	 * The top-left corner of the board.
+	 */
+	private int x, y;
+	
+	/**
+	 * The size of, and therefore the offset between, each unit on the board.
+	 */
+	private int offset;
+	
+	/**
+	 * List of the buttons in the panel.
+	 */
 	private List<Button> buttons = new ArrayList<>();
+	
+	/**
+	 * The button that is being pressed, when applicable.
+	 * Null when no button is being pressed.
+	 */
 	private Button pressedButton;
+	
+	/**
+	 * Game mode selection buttons.
+	 */
 	private Button playAgainstPlayer, playAgainstComputer;
+	
+	/**
+	 * The colour of current player.
+	 */
 	private char currentColour;
-
+	
+	/**
+	 * Creates the board panel.
+	 */
 	public BoardPanel() {
+		// Retrieve textures
+		
 		blankTexture = TextureLibrary.getTexture("blank");
 		redTexture = TextureLibrary.getTexture("red_chip");
 		yellowTexture = TextureLibrary.getTexture("yellow_chip");
@@ -44,7 +79,9 @@ public class BoardPanel extends Panel {
 
 		getBoardSize();
 		resizeTextures();
-
+		
+		// TODO: Link menu
+		
 		Button menuButton = new TextButton("Menu", size.width / 50, size.height / 50, size.width / 10, size.height / 10, new OnClickListener() {
 
 			@Override
@@ -56,9 +93,11 @@ public class BoardPanel extends Panel {
 		});
 
 		menuButton.setVisible(true);
-
+		
 		buttons.add(menuButton);
-
+		
+		// Game mode selection
+		
 		playAgainstPlayer = new TextButton("Player vs Player", size.width / 3, size.height / 4 - 10, size.width / 3, size.height / 4, new OnClickListener() {
 
 			@Override
@@ -102,7 +141,9 @@ public class BoardPanel extends Panel {
 		playAgainstComputer.setVisible(true);
 
 		buttons.add(playAgainstComputer);
-
+		
+		// Buttons for placing chips
+		
 		for (int i = 0; i < 7; i++) {
 			int column = i;
 
@@ -124,7 +165,9 @@ public class BoardPanel extends Panel {
 
 			}));
 		}
-
+		
+		// Keyboard bindings
+		
 		InputMap inputMap = getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW);
 
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_1, 0, true), "placeColumn1");
@@ -159,7 +202,10 @@ public class BoardPanel extends Panel {
 			});
 		}
 	}
-
+	
+	/**
+	 * Tells the user that a chip has not been placed.
+	 */
 	private void displayChipNotPlacedMessage() {
 		new Thread(new Runnable() {
 
@@ -194,7 +240,11 @@ public class BoardPanel extends Panel {
 
 		}).start();
 	}
-
+	
+	/**
+	 * Displays who won.
+	 * @param player the player who has won.
+	 */
 	public void showVictoryMessage(Player player) {
 		new Thread(() -> {
 			try {
@@ -220,6 +270,9 @@ public class BoardPanel extends Panel {
 		}).start();
 	}
 
+	/**
+	 * Disables input.
+	 */
 	public void disableInput() {
 		for (Button button : buttons) {
 			button.setVisible(false);
@@ -229,7 +282,10 @@ public class BoardPanel extends Panel {
 
 		gameEnded = true;
 	}
-
+	
+	/**
+	 * Gets the size of the board.
+	 */
 	private void getBoardSize() {
 		int maxX = size.width / 7;
 		int maxY = size.height * 2 / 15;
@@ -245,7 +301,10 @@ public class BoardPanel extends Panel {
 			y = size.height / 14;
 		}
 	}
-
+	
+	/**
+	 * Resizes the textures.
+	 */
 	private void resizeTextures() {
 		blankTexture = blankTexture.scale((double)offset / (double)blankTexture.getWidth(), (double)offset / (double)blankTexture.getHeight());
 		redTexture = redTexture.scale((double)offset / (double)redTexture.getWidth(), (double)offset / (double)redTexture.getHeight());
@@ -253,6 +312,9 @@ public class BoardPanel extends Panel {
 	}
 
 	@Override
+	/**
+	 * Paints this panel.
+	 */
 	protected void paintComponent(Graphics g) {
 		if (gameStarted) {
 
@@ -288,6 +350,9 @@ public class BoardPanel extends Panel {
 	}
 
 	@Override
+	/**
+	 * Called when a mouse button is released.
+	 */
 	public void onMouseReleased(MouseEvent e) {
 		if (e.getButton() != MouseEvent.BUTTON1 || gameEnded) {
 			return;
@@ -307,6 +372,9 @@ public class BoardPanel extends Panel {
 	}
 
 	@Override
+	/**
+	 * Called when a mouse button is pressed.
+	 */
 	public void onMousePressed(MouseEvent e) {
 		if (e.getButton() != MouseEvent.BUTTON1 || gameEnded) {
 			return;
@@ -323,7 +391,10 @@ public class BoardPanel extends Panel {
 			}
 		}
 	}
-
+	
+	/**
+	 * Repaints the panel on the AWT event dispatching thread.
+	 */
 	public void update() {
 		SwingUtilities.invokeLater(new Runnable() {
 
@@ -333,7 +404,11 @@ public class BoardPanel extends Panel {
 			}
 		});
 	}
-
+	
+	/**
+	 * Sets the visibility of the colour buttons
+	 * @param visible the visibilitiy of the colour buttons.
+.	 */
 	public void setColourButtonsVisible(boolean visible) {
 		for (Button button : buttons) {
 			if (button instanceof ColourButton) {
@@ -343,7 +418,11 @@ public class BoardPanel extends Panel {
 
 		update();
 	}
-
+	
+	/**
+	 * Sets the colour on the colour buttons.
+	 * @param colour the colour.
+	 */
 	public void setColourButtonsColour(char colour) {
 		currentColour = colour;
 

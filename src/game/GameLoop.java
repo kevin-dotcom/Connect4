@@ -82,7 +82,12 @@ public class GameLoop {
 	public static void setMove(Move move) {
 		GameLoop.move = move;
 	}
-
+	
+	/**
+	 * Sets the player.
+	 * @param red the red player.
+	 * @param yellow the yellow player.
+	 */
 	public static void setPlayers(Player red, Player yellow) {
 		players[0] = red;
 		players[1] = yellow;
@@ -101,7 +106,10 @@ public class GameLoop {
 	public static void stopRunning() {
 		isRunning = false;
 	}
-
+	
+	/**
+	 * Called after player choses to play against a computer or another player.
+	 */
 	public static void run() {
 		new Thread(() -> {
 			// Create timers
