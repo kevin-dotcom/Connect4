@@ -36,7 +36,7 @@ public class TextButton extends Button {
 		g.drawRect(x - 1, y - 1, width + 1, height + 1);
 		g.drawImage(isPressed ? pressedTexture.getImage() : texture.getImage(), x, y, observer);
 
-		g.drawString(text, x + (width - fm.stringWidth(text)) / 2, y  + height * 3 / 4);
+		g.drawString(text, x + (width - fm.stringWidth(text)) / 2, y + height * 2 / 3);
 	}
 	
 }

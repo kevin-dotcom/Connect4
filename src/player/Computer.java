@@ -100,12 +100,16 @@ public class Computer extends Player {
 			for (int i = 0; i < 7; i++) {
 				for (int j = Board.tops[i]; j < Board.tops[i] + 3 && j <= 6; j++) {
 					int longestPossible = Board.longestInARow(j, i, colour, false);
-					if (longestPossible >= 3) {
+					if (longestPossible == 4) {
+						Board.placeChip(i, colour);
+						return;
+					}
+					else if (longestPossible == 3) {
 						if (movePriority[i] == Integer.MAX_VALUE) {
 							movePriority[i] = 5 - longestPossible + Board.getDistanceToClosestChip(j, i, colour);
 						}
 						else {
-							movePriority[i] += 5 - longestPossible + Board.getDistanceToClosestChip(j, i, colour);
+							movePriority[i] -= 5 - longestPossible + Board.getDistanceToClosestChip(j, i, colour);
 						}
 						
 						switch (j - Board.tops[i]) {
@@ -166,6 +170,7 @@ public class Computer extends Player {
 				}
 				Board.placeChip(bestMove, colour);
 			}
+			
 		});
 		
 		thread.start();

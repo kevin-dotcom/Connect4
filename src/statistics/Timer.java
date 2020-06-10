@@ -158,7 +158,13 @@ public class Timer {
 	 * @return the time.
 	 */
 	public long getTime() {
-		return totalTime;
+		long time = totalTime;
+		
+		if (isRunning) {
+			time += System.currentTimeMillis() - previousTime;
+		}
+		
+		return time;
 	}
 	
 	/**

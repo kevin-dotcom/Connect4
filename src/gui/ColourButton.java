@@ -14,7 +14,7 @@ public class ColourButton extends Button {
 	@Override
 	public void paint(Graphics g, ImageObserver observer) {
 		if (isVisible) {
-			g.drawImage(isPressed ? pressedTexture.getImage() : texture.getImage(), x, y, observer);
+			g.drawImage(isPressed ? pressedTexture.getImage() : texture.getImage(), x, y - height / 2, observer);
 		}
 	}
 
