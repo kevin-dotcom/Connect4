@@ -94,7 +94,6 @@ public class Timer {
 	 */
 	private void startTimer() {
 		lastStartedTime = System.currentTimeMillis();
-		update(lastStartedTime - previousTime);
 		isRunning = true;
 		moveTimes.add(0l);
 	}
