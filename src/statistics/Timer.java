@@ -93,8 +93,8 @@ public class Timer {
 	 * Starts the timer.
 	 */
 	private void startTimer() {
-		lastStartedTime = System.currentTimeMillis();
 		isRunning = true;
+		lastStartedTime = System.currentTimeMillis();
 		moveTimes.add(0l);
 	}
 	
@@ -130,7 +130,7 @@ public class Timer {
 				Timer timer = timers.get(key);
 				
 				if (timer.lastStartedTime > previousTime) { // Check if timer just started
-					continue;
+					timer.update(currentTime - timer.lastStartedTime);
 				}
 				
 				timer.update(delta);
